@@ -1,3 +1,713 @@
-<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Stockschießen Performance Tracker</title><style>
-:root{--bg:#eef3f7;--card:#fff;--text:#102331;--muted:#72808b}*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,sans-serif;color:var(--text)}.app{max-width:430px;margin:auto;padding:12px 12px 28px;user-select:none}header{text-align:center;padding:8px}h1{margin:0;font-size:1.55rem}header p{margin:4px;color:var(--muted);font-size:.8rem}.summary{display:flex;justify-content:space-between;align-items:flex-start;background:linear-gradient(135deg,#123247,#1b5774);color:#fff;padding:16px 18px;border-radius:22px;margin-bottom:12px}.cap{display:block;font-size:.68rem;line-height:1.2;opacity:.75}.big{font-size:2rem;font-weight:850;line-height:1.15;margin-top:4px}.rate{text-align:right}.rate strong{display:block;font-size:1.2rem;line-height:1.15;margin-top:4px}.rate-main{font-weight:850;font-size:2rem;line-height:1.15}.rate-abs{font-size:2rem;line-height:1.15;font-weight:850;opacity:1;margin-left:5px}.buttons{display:grid;gap:10px}.shot{border:0;border-radius:20px;background:var(--card);min-height:112px;padding:8px 10px;display:grid;grid-template-columns:92px 1fr 50px;align-items:center;text-align:left;color:var(--text);box-shadow:0 4px 16px #1a334315;touch-action:manipulation}.shot.pressing{transform:scale(.975);filter:brightness(.95)}.shot img{width:88px;height:100px;object-fit:contain;object-position:center;border-radius:14px;background:#eef2f6}.label strong{display:block}.label small{font-size:.7rem;color:var(--muted)}.count{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:1.35rem;font-weight:850}.miss .count{color:#e5484d;background:#fff0f0}.half .count{color:#b67500;background:#fff5dd}.hit .count{color:#159650;background:#e2f8eb}.hint{text-align:center;color:var(--muted);font-size:.7rem;margin:10px}.historyBox{background:var(--card);border-radius:20px;padding:14px}.hh{display:flex;justify-content:space-between}.hh h2{font-size:1rem;margin:0}.hh span{font-size:.67rem;color:var(--muted)}.history{display:grid;gap:7px;max-height:260px;overflow:auto;margin-top:9px}.entry{display:grid;grid-template-columns:34px 1fr auto;background:#f5f8fa;border-radius:12px;padding:8px 10px;font-size:.8rem}.entry time{font-size:.68rem;color:var(--muted)}.empty{text-align:center;color:var(--muted);padding:18px}.reset{width:100%;margin-top:13px;padding:14px;border-radius:16px;border:1px solid #d3dde4;background:transparent;color:var(--text);font-weight:750}@media(prefers-color-scheme:dark){:root{--bg:#0d171e;--card:#18242c;--text:#f3f7f9;--muted:#a3afb7}.entry{background:#111b22}}
-</style><div class="app"><header><h1>Stockschießen</h1><p>Performance Tracker</p></header><section class="summary"><div><span class="cap">SCHÜSSE GESAMT</span><div class="big" id="total">0</div></div><div class="rate"><span class="cap">ERFOLGSQUOTE</span><strong id="rate"><span class="rate-main">0 %</span><span class="rate-abs">(0/0)</span></strong></div></section><main class="buttons"><button class="shot miss" data-shot="miss"><img src="data:image/webp;base64,UklGRvAPAABXRUJQVlA4IOQPAADwRACdASqLANwAPm0yk0ekIyGlKLgKmKANiWJEVBgWU2vUn9rc4PEP618d9B8f7ua/Z/c980v916yPMA/S3/W+lV+wHvq8yf2q+836Tv9t6g3846jr0APLU/cD4T/7H/1v2A9q/1APQAvdHLP7TUJvlX5Jx38vXlflL/z2+QgA/Mf6p58c3G6t5AmgB+aP1v9mDQw9a+wUWNsirDMMhK0RZFvT5snL+BdyN1qRIG3Uq8aAhhm6Jtfvc/5v5bMkeBEUeA9nfLxK8V8pUV8WWsxsUjGzjcdv2+7M5cABlMFb8Qs+NsArrWt01pOaqjLR3I//FMbAg4q20l/j8iRDPA4ISojv5oBlaaY5YsiR6u63rIhjo2N7944VXM4LX/OpuRV+2KgO0qb07mM23+0Yj4hTJz5nU03PKQ41fVWZ46cYM0kty+NCECy/vKEk1GLH//GCxgPfR0kcCbvXT7az2DiEerL6TafdS/0Uj8VatfC9WweQXF9Whk63BgzSH1veSQbEL+NnEwRpJFp1DWoZjuI1U48nVD5kOB1hDwhgQ6V8yGrJf6ZE6HMMZ4qJ8+g5+mqExXe5T0l0r5XOSjybPfG2rECgMf8FdjIvyu+3LtQg5mxavYB4yLgGaXjFqMRZ6m9ECZ0+8kmAfhTJDA0F1P3H1qTOixYy6WgpalZUjP/qPEWYvsIg72TY77b4QgKwfJ2eatNOhTrjRxFeJ57gPe2eBW4BWAodPwcByR4NgTH7gAD+/Ta5evYxNmfIIdHfGqIWPWtacGJXqp4r3HV/ZGh751obHXxIsdnvsPqNNJo39UnPWCarBlFvJAiqMv0fgH6fHJLP1dyGiT74DsEdaoGWAyvkYcP/NlcFH3lVzfH+nzMcIN2jhQlpTLtugWJCSh5+j3Zs34Oo30D7f57noRIuNLM2GTQ2I51xkxn788m2C/96Ul2K+cQucQtksHcs3f8D/i8Mp8FVJ2KVf/mbl9DRW0CU1N5wX3i73JMAms+j7VfptmRb58Lmpp/J+2vG+3IJSA7u2eQBfa+UE/vH4s+fpdlRwG5nYilAxFWkBTvu3Ed87S2IYMp2a29aq2J5U/RNQ4AfZBzQ16UT75AUX3M24ANX4tkhlxpHGoF8BM3gBY53opGKzo8r2SBc/nyp94PkmazeeJwN2d5MdaDamnz0g2r0+J68iL6pX6Z0w3zhfnEusk13WEvodD/kqDgvlFK1qj3WYDEBbLMflUjsfeLXMkiKglAXTRiNuAWEDD7ggrSWU9hkid2ZLHw/Dto+gKYDMbpdznt4KgiRZzZY/Kh/DoAEPKU3NRjXBMunHW/vs04kGSRYjUpR2i82n44YjqOgn7zZJU7fuSjjx/7wQzRxAhm1DktKQPzFDqy46v1xMZeyHu5dYa3GKYz3BBBwesOgA92HE+CM9sve6IFRiAFmx3r9wUw2uVtFkH4jK8odbQbfkeSQHubFkC7KOgQuuHKd9wvbfDd9mJBvdQnutWG3HIhO8XF2Uir5RHQWGVMLykhFHuFqlrgMt3X798/f7lUe7s+c8UyQea9+S3QHamtMOcOntvTf1bNlMrsMxU/iZcG8clntUGt1+KfwibuKs+3/wIUY2WRD1OYbpc4P2mjXMZUFL9hYOPIe+FnLXpTC3SEKpHDNNsybTlSPqlctuqvFoo1jtJvhtEvlaMsdaiGTyh0J9bYE5q2PlHjXtq8/r2xmLcwNeejY4ivKcmK9UmdbU9Mmt72q9VfBXd8mF5Lk/OVM+Xyd026DSjxB4IL/+c/Km7TQqZ/UL8LnvrtULWLM/xdgI4aneJKU7ja5gsK29JvS6dNT+oXUFzsapHMQm/poK2SPERc088KZf7To/MpaZubyCJ3FHeoVzg4cKRoiTb6eeB537y86dDqv1UAxbjNLmGMvdjutYt8gGVK+w8q+iou666O0NGDJO8kJS9NmB/flw1fLb4s1qjNFRr6JW2xVpBDeV/nIiwlLMT3co38RpLCiN8uL3WKOdnUuQ9k0QqkJglnEheiW+qEDfuoOBlhz+a5XhuNTFmO/dnz9Yd0P6P6serm108NwyptyiFVzl2Jzq2EGO5nGf1tynjAIlNKBHdLs1vS0paMa2GaC/7WynaX+2D4X3BXw7lRDbrX/+UoWdjjpfhu4tWLBLVh1JcZLPz+yXntQh3z/kcQfLfPzQIdSJyr5fp22k/1LdXwOC8DXmVCIcbQ2Ho6TKJoHgtto5t3pevq6c3CuaFljWYFMABU3XxD0f8LqAVFpALReZQOUL2R5Obkt5Yv1mEnCuvskh/ofXSlDTH5+rLJS9rKMWRaEKxNyJ7CNr5kt5CfWaoff0Th8OE2IQJyqAUUGB8TUJURW7jq8Mtg2y5UafOldsUAKR1hA+pkTnUMR+d4yyqhT4ZTav4+4Tw49OKZjkfY51xRwkCmdcEQSKSs/F2VrHymjhg9HycBXUWsR78BiJdIvHf6Ler6rs91z9tmELdOpA9R8wlaZa3+fwjL/vKWUd067S9rXJHaxTJul49cnjW4Oefdf0ujjit/ux3202o7J/8Nn/5GIs0rWuLtKSYIGLU5WYekI+dm8C7rJ1ws/OZDfTA3/Xp6JGSO/UvokjMYDpQud0EiYzYXMH9Jn3mBoKy7kp2wSun9mgcsoEoM2vS8fi9XgNcuWn6GUN1fo2LhLc+ESHDGdBx6BHW39QM9k79veCnC7PtOFIG6f6gZanh5K+9T7VBXDUTr8HSAf8Y/a+3yuZERW+3Rw9RWV2JhfueyvRU//M+MFHsvBYUYDmmQBcV8I8ovHwYOiVjvh0JvHk7xJQzeO0CYhIFNaTKCKGL0zyRbtCTHv0kiIfvxcN75V0rAqMg7uSZAjeiuokYtKenfg7oQowru5FCuO2dbDZYuG1vRr++EE/3AWL3XYpxGVL/HbucNVff5hh8yCEe61xK9rFBeTYqxBR2N7xznkuTW1Kw9KVlMNEOpmtPOC0YzpqOZ6HexEbiXB/lbXf5v6bg6nqLimFLnFBh80M2TA7pnle9CS/nKtXzgJJy+ApsLa51E4GQGcSE2X2tBFW99bnOWMGRCUK2nCt7kBLDMKVP7fG3GOOgAAnlNOhuywvzF3F+xiI4MjzUSO5ecCa4TW+x6WV5H+rxJ2yx4DJU9koicl8IZVGZlfCVo+1bJMnKAi4G7acDZuBiO4HlWh/AdObXwrpxf1mFMsvifYv2jmwl7pwQVjgwWCxveyuCt47SaGItZufaZLmyDyjiczGgpJB6MpTzuljCqAwjSfHh6OsU1IWrYKHCr7MDYSrXmr+sJuLQR5unzyZacTr6Z3Yq6t3iP5iRPAp7SGzHLwXZBi8vMjC36m1ywr7zHHb1LW0dA5YMWlgPYFj6fVn1DbFPc9XN4b/bndO1vUniVMjG2Ut94+GWbwlZ6HLi5pXznfJPMZg/p1CPD0PWoGicBmJ/ayJfThsn5FBQZ6Sj9fc/YHnPjRY0nFv2Xj9JL13oggoveA75yZGKfJDGFFvNt/gVVRBznN+xSCm1f2V4gePpfkXbiJ+BcnV7pTZ/LuwEYsCi4PntPVzRXfZY12dIMtssoGKDqeOMyqlsMJ3JIYrckGfSP6jByHDmidORXcEdZteyEfImeIBtcHDKhzRbfu825VBreB9Fp6jH9wBxgJiTwMBTRJpa4sQXF1Pt5jwcy3DfYciOPBACyMsiJhheqgmeGraDzi1kaTpaTgoT+EaNTkYhko2XsHTLHI0rObUJl8W8O2ffgOFHbN3vPTcjNupK6r5iG4Q7XjzjGZTiC2WqJwL/AA0J5K1Sobs65MmvmDM6ClqzvCmI88t6C+RZ2kWSnGtoDsG0OiXh4yw0KGXgpcEB0UjyP8cNsHRGsefszLNJ0CfQXKrfsyQnT9Q5vPcNLLLtNFTI4AAAbCZNiNY6L3plch7aHJWfigq3OSB27yEAFrqxJKAkjsklv+P975u59vEBuOMqhnA6xfgEHJRg+s/sHm0rwsqXr2p7QCtJEuc/twJEzDhWfmyw1zChFCDCkQTnMFiKiG5eV+8CIikgyicnm5O14P6tUxzQlocW5OGFytFcS2cPbXjUIt0htiTIhGT2HRmT17g4b/4BrmgWtORPAbCnLdJh4QYy+uDu0moO0KhGJOnX6i5hbcjmYvcZUHu9nUbJFPEOp4cqT9wYWTIqil+0YaPjndZysVnH4xF2H/38HUDxBZYVBjYMPOzlFjPrPEFVYvcOCQsU2xwoKvTOHvAaumNBpGjvPuWIG1EoCJhwzcsNtWzEp+NqDtlfmWMhEk8fl0DaaoUv2kXlVcrUfBVnOKGx+RCy5g6nQambKk30ouVnOxRb1Q6fZllKHK1WR4NLxeNFCBoZ0MzrUokFs2jc3ubSw5Cq99BvmocQnZmF47KCbzVXYIZo4sjrUIkU/gBKTB8gAIOu1cWCyXarxoQm2LEDvS7bwCh/JsCmhhAxbGJQx0CPHrB7C5vQSZ/BxEKToMKOOwa3c1DSZHSa9sjeZ1pnEkM9Pqi4OqaJHNx8DoHEe/5R54oPDP3SDIK/zLkBTmW0XinscN4ahqq8OrkOKJHSYdjagK29BSrAWJ6u4io6mPZu7v91/BBcfiLSxfxCdLF0tH2NXMZQcf7QndcNmgcMZ8hbh0Fy5KAUKeRjKfXpXr6K4L0nF6GcTSAfzr/eQ4LijrLI0qXohP+ntX4PEpSKKPcHqh/G+yIogy3qFHN1ADdozAwW4iMW38KWvqhFXJI8kvSoqwGDAKEvtaMT4eZzAEVclifUH7z+LhJfy9m3/9XoMCrciDSGuCn3VMqJFuSzw00mUIZz+A3K579rCj7TylYeL/4632K1dypByd1Js30dWxdtAeC88pdvK3jNYOXZN8xQ1UpXR1x3Xr0BPKnDxsVfzGUlxmZZ35ejw3AgqU1+rjSpthqYh8Yia0AXdPnLlqQku2ATSCEiFWx6xwR6cU9S5Fwyi1UuAHxwliBtNY5ZTmht4SUvaOt9YzvuZ0GnBLad7E/Wr6bfRx3TaD+Zmo0qzQqmD4K3PcihfuMTW7xg9JLe0GX0BNjJPZBuA/VPwsaQSzCxfDjWlF+hLsFtqrqXNNMc4cojEe3A7+dPzurfeTMq1dt6wNnG/aDrOdughej+dXUmx0Uza9uEKHLNBWCTv30zTs6RntB7ONGEiLHN56MDAXeVpCeRvHywYGwI1fekFlK+THWZ/FOWf02l6k8BZdP6bo/SOQO98agyyGxxyvg1fhREIbb7WJYrNjjfYN4GzYC69tV4YI+PsAFxkon93OusfYIQ/uRisiCpm4EZazImQTo0g7n6zJojCnzfN64bhkBIL0gGZ8l9eaIWxH6fCe2FItHrNVlsUC4yEBnMtcoEFjhgx0y+whxRS0SP3t2lFgwn0mTGNMgoPM3KqlEOl/2UfGi/W8IHXkzzF211xpjwEYBJpoAAA=" alt="Nicht getroffen"><span class="label"><strong>Nicht getroffen</strong><small>Tippen +1 · Halten −1</small></span><span class="count" id="miss">0</span></button><button class="shot half" data-shot="half"><img src="data:image/webp;base64,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" alt="Halb getroffen"><span class="label"><strong>Halb getroffen</strong><small>Tippen +1 · Halten −1</small></span><span class="count" id="half">0</span></button><button class="shot hit" data-shot="hit"><img src="data:image/webp;base64,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" alt="Getroffen"><span class="label"><strong>Getroffen</strong><small>Tippen +1 · Halten −1</small></span><span class="count" id="hit">0</span></button></main><p class="hint">Kurz tippen = +1 • 0,6 Sek. halten = −1</p><section class="historyBox"><div class="hh"><h2>Verlauf</h2><span id="hc">0 Einträge</span></div><div id="history" class="history"></div></section><button class="reset" id="reset">↻ Alles zurücksetzen</button></div><script>(()=>{const key='stockschiessen-performance-v3',names={miss:'Nicht getroffen',half:'Halb getroffen',hit:'Getroffen'};let s,tm=null,long=false;const q=x=>document.querySelector(x);try{s=JSON.parse(localStorage.getItem(key))}catch(e){}if(!s||!Array.isArray(s.history))s={history:[]};function save(){try{localStorage.setItem(key,JSON.stringify(s));return true}catch(e){return false}}function counts(){return s.history.reduce((a,x)=>(a[x.type]++,a),{miss:0,half:0,hit:0})}function render(){let c=counts(),t=s.history.length;q('#miss').textContent=c.miss;q('#half').textContent=c.half;q('#hit').textContent=c.hit;q('#total').textContent=t;const points=c.hit+c.half*.5, pct=t?Math.round(points/t*100):0, abs=(Number.isInteger(points)?points:points.toFixed(1).replace('.',','));q('#rate').innerHTML='<span class="rate-main">'+pct+' %</span><span class="rate-abs">('+abs+'/'+t+')</span>';q('#hc').textContent=t+' '+(t===1?'Eintrag':'Einträge');let h=q('#history');h.innerHTML='';if(!t){h.innerHTML='<div class="empty">Noch keine Schüsse erfasst.</div>';return}s.history.slice().reverse().forEach((x,i)=>{let e=document.createElement('div');e.className='entry';e.innerHTML='<b>#'+(t-i)+'</b><strong>'+names[x.type]+'</strong><time>'+new Date(x.time).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+'</time>';h.appendChild(e)})}function add(k){s.history.push({type:k,time:Date.now()});if(s.history.length>500)s.history.shift();render();save()}function remove(k){for(let i=s.history.length-1;i>=0;i--)if(s.history[i].type===k){s.history.splice(i,1);render();save();if(navigator.vibrate)navigator.vibrate(40);return}}document.querySelectorAll('[data-shot]').forEach(b=>{b.onpointerdown=()=>{long=false;b.classList.add('pressing');tm=setTimeout(()=>{long=true;remove(b.dataset.shot);b.classList.remove('pressing')},600)};b.onpointerup=()=>{clearTimeout(tm);b.classList.remove('pressing');if(!long)add(b.dataset.shot)};b.onpointercancel=()=>{clearTimeout(tm);b.classList.remove('pressing')};b.oncontextmenu=e=>e.preventDefault()});q('#reset').onclick=()=>{if(confirm('Alle Werte und den Verlauf zurücksetzen?')){s={history:[]};render();save()}};render()})()</script>
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Stockschießen Performance Tracker</title>
+    <!-- Tailwind CSS für modernes, responsives Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Inter für beste Lesbarkeit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Verhindert ungewolltes Markieren von Text und Kontextmenüs bei Long-Press auf Mobilgeräten */
+        .no-select {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        /* Animations-Fortschrittsbalken für den Long-Press */
+        .hold-progress {
+            width: 0%;
+            transition: none;
+        }
+        
+        .holding .hold-progress {
+            width: 100%;
+            transition: width 500ms linear;
+        }
+
+        /* Sanftes Einblenden neuer Historien-Einträge */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-slide-in {
+            animation: slideIn 0.25s ease-out forwards;
+        }
+
+        /* Custom Scrollbar für die Historie */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(71, 85, 105, 0.8);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
+
+    <!-- Header / Kopfbereich -->
+    <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-20 px-4 py-3.5 shadow-lg">
+        <div class="max-w-lg mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <!-- Eisstock SVG Icon -->
+                <div class="bg-sky-500/15 border border-sky-500/30 p-2 rounded-xl text-sky-400">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v7"/>
+                        <path d="M9 3h6"/>
+                        <rect x="4" y="10" width="16" height="7" rx="3.5"/>
+                        <path d="M6 17h12"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight text-white leading-tight">Stock-Tracker</h1>
+                    <p class="text-xs text-slate-400 font-medium">Performance & Trefferquote</p>
+                </div>
+            </div>
+
+            <!-- Zurücksetzen Button -->
+            <button id="btn-reset-open" type="button" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-rose-950/60 text-slate-300 hover:text-rose-400 border border-slate-700 hover:border-rose-800/60 text-xs font-semibold transition-all active:scale-95">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                <span>Zurücksetzen</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hauptbereich -->
+    <main class="flex-1 max-w-lg w-full mx-auto px-4 py-5 flex flex-col gap-5">
+
+        <!-- Toast-Benachrichtigung (z.B. bei Korrektur / Long-Press) -->
+        <div id="toast-container" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 translate-y-4">
+            <div id="toast-message" class="bg-slate-800/95 backdrop-blur-md border border-slate-700 text-white px-4 py-2.5 rounded-full shadow-2xl text-sm font-medium flex items-center gap-2">
+                <span id="toast-icon">ℹ️</span>
+                <span id="toast-text">Aktion ausgeführt</span>
+            </div>
+        </div>
+
+        <!-- Statistik-Karte -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl">
+            <div class="flex items-end justify-between mb-3">
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Gesamtversuche</span>
+                    <div class="flex items-baseline gap-2">
+                        <span id="stat-total" class="text-3xl font-extrabold text-white">0</span>
+                        <span class="text-xs text-slate-400">Schüsse</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Treffer-Wertung</span>
+                    <div class="flex items-baseline justify-end gap-1">
+                        <span id="stat-score" class="text-2xl font-extrabold text-emerald-400">0%</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500">Voll = 100%, Halb = 50%</p>
+                </div>
+            </div>
+
+            <!-- Visueller Verteilungsbalken -->
+            <div class="w-full h-3.5 bg-slate-800 rounded-full overflow-hidden flex p-0.5 gap-0.5 mb-3">
+                <div id="bar-full" class="bg-emerald-500 h-full rounded-l-full transition-all duration-300" style="width: 0%"></div>
+                <div id="bar-half" class="bg-amber-400 h-full transition-all duration-300" style="width: 0%"></div>
+                <div id="bar-miss" class="bg-rose-500 h-full rounded-r-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Prozentuale Einzelwerte -->
+            <div class="grid grid-cols-3 gap-2 text-center text-xs font-medium">
+                <div class="bg-slate-950/60 rounded-xl py-1.5 px-2 border border-slate-800/80">
+                    <span class="text-emerald-400 font-bold block" id="pct-full">0%</span>
+                    <span class="text-slate-400 text-[11px]">Voll</span>
+                </div>
+                <div class="bg-slate-950/60 rounded-xl py-1.5 px-2 border border-slate-800/80">
+                    <span class="text-amber-400 font-bold block" id="pct-half">0%</span>
+                    <span class="text-slate-400 text-[11px]">Halb</span>
+                </div>
+                <div class="bg-slate-950/60 rounded-xl py-1.5 px-2 border border-slate-800/80">
+                    <span class="text-rose-400 font-bold block" id="pct-miss">0%</span>
+                    <span class="text-slate-400 text-[11px]">Nicht</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Erfassungs-Buttons -->
+        <section aria-label="Treffer erfassen" class="flex flex-col gap-3">
+            <div class="flex items-center justify-between px-1">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Wurf erfassen</h2>
+                <span class="text-[11px] text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-0.5 rounded-full">
+                    Tippen: <b>+1</b> &bull; Halten: <b>-1</b>
+                </span>
+            </div>
+
+            <!-- Button 3: Voll getroffen (Grün / Smaragd) -->
+            <button type="button" data-type="full" class="action-btn no-select relative overflow-hidden w-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 active:scale-[0.98] text-white rounded-2xl p-4 sm:p-5 shadow-lg shadow-emerald-950/50 border border-emerald-400/30 transition-transform flex items-center justify-between cursor-pointer">
+                <!-- Ladebalken für Long-Press (-1) -->
+                <div class="hold-progress absolute bottom-0 left-0 h-1.5 bg-white/90 z-10"></div>
+                
+                <div class="flex items-center gap-3.5 pointer-events-none">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-950/30 flex items-center justify-center border border-white/20 shrink-0">
+                        <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <span class="block text-lg sm:text-xl font-extrabold tracking-tight">Voll getroffen</span>
+                        <span class="block text-xs text-emerald-100 font-medium opacity-90">Voller Treffer / Daube</span>
+                    </div>
+                </div>
+                <div class="pointer-events-none bg-emerald-950/40 border border-white/20 px-4 py-2 rounded-xl min-w-[3.75rem] text-center">
+                    <span id="count-full" class="text-2xl sm:text-3xl font-black tabular-nums">0</span>
+                </div>
+            </button>
+
+            <!-- Button 2: Halb getroffen (Gelb / Amber) -->
+            <button type="button" data-type="half" class="action-btn no-select relative overflow-hidden w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 active:scale-[0.98] text-slate-950 rounded-2xl p-4 sm:p-5 shadow-lg shadow-amber-950/40 border border-amber-300/50 transition-transform flex items-center justify-between cursor-pointer">
+                <!-- Ladebalken für Long-Press (-1) -->
+                <div class="hold-progress absolute bottom-0 left-0 h-1.5 bg-slate-950/75 z-10"></div>
+
+                <div class="flex items-center gap-3.5 pointer-events-none">
+                    <div class="w-12 h-12 rounded-xl bg-slate-950/15 flex items-center justify-center border border-slate-950/20 shrink-0">
+                        <svg class="w-7 h-7 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a10 10 0 1 0 0 20Z"/>
+                            <path d="M12 2a10 10 0 0 1 0 20" stroke-dasharray="3 3"/>
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <span class="block text-lg sm:text-xl font-extrabold tracking-tight">Halb getroffen</span>
+                        <span class="block text-xs text-slate-900 font-semibold opacity-85">Gestreift / Teilwirkung</span>
+                    </div>
+                </div>
+                <div class="pointer-events-none bg-slate-950/15 border border-slate-950/20 px-4 py-2 rounded-xl min-w-[3.75rem] text-center">
+                    <span id="count-half" class="text-2xl sm:text-3xl font-black tabular-nums">0</span>
+                </div>
+            </button>
+
+            <!-- Button 1: Nicht getroffen (Rot / Koralle) -->
+            <button type="button" data-type="miss" class="action-btn no-select relative overflow-hidden w-full bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 active:scale-[0.98] text-white rounded-2xl p-4 sm:p-5 shadow-lg shadow-rose-950/50 border border-rose-400/30 transition-transform flex items-center justify-between cursor-pointer">
+                <!-- Ladebalken für Long-Press (-1) -->
+                <div class="hold-progress absolute bottom-0 left-0 h-1.5 bg-white/90 z-10"></div>
+
+                <div class="flex items-center gap-3.5 pointer-events-none">
+                    <div class="w-12 h-12 rounded-xl bg-rose-950/30 flex items-center justify-center border border-white/20 shrink-0">
+                        <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <span class="block text-lg sm:text-xl font-extrabold tracking-tight">Nicht getroffen</span>
+                        <span class="block text-xs text-rose-100 font-medium opacity-90">Fehlschuss / Vorbei</span>
+                    </div>
+                </div>
+                <div class="pointer-events-none bg-rose-950/40 border border-white/20 px-4 py-2 rounded-xl min-w-[3.75rem] text-center">
+                    <span id="count-miss" class="text-2xl sm:text-3xl font-black tabular-nums">0</span>
+                </div>
+            </button>
+        </section>
+
+        <!-- Treffer-Historie -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl flex-1 flex flex-col min-h-[220px]">
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300">Wurf-Historie</h2>
+                </div>
+                <span id="history-count-badge" class="text-xs font-semibold text-slate-400 bg-slate-800 px-2 py-0.5 rounded-lg">0 Einträge</span>
+            </div>
+
+            <!-- Liste der Einträge -->
+            <div id="history-list" class="flex flex-col gap-2 max-h-64 overflow-y-auto pr-1">
+                <!-- Wird dynamisch per JavaScript befüllt -->
+            </div>
+
+            <!-- Leerzustand -->
+            <div id="history-empty" class="flex-1 flex flex-col items-center justify-center text-center py-8 text-slate-500">
+                <svg class="w-10 h-10 mb-2 opacity-40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                <p class="text-sm font-medium">Noch keine Würfe erfasst</p>
+                <p class="text-xs text-slate-600 mt-0.5">Tippe oben auf eine Kategorie, um zu starten.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bestätigungs-Modal für Zurücksetzen (kein nativer alert/confirm) -->
+    <div id="reset-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-sm w-full p-6 shadow-2xl transform transition-all">
+            <div class="w-12 h-12 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-400 flex items-center justify-center mb-4">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h18"/>
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                    <line x1="10" y1="11" x2="10" y2="17"/>
+                    <line x1="14" y1="11" x2="14" y2="17"/>
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Alle Daten zurücksetzen?</h3>
+            <p class="text-sm text-slate-400 mb-6">
+                Möchtest du wirklich alle Zähler und die gesamte Wurf-Historie unwiderruflich auf 0 zurücksetzen?
+            </p>
+            <div class="flex gap-3">
+                <button id="btn-reset-cancel" type="button" class="flex-1 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm transition-colors">
+                    Abbrechen
+                </button>
+                <button id="btn-reset-confirm" type="button" class="flex-1 py-3 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-semibold text-sm shadow-lg shadow-rose-950/50 transition-colors">
+                    Ja, löschen
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Stockschießen Performance Tracker
+         * Verwaltet Zähler, Historie, Long-Press-Interaktionen und LocalStorage-Persistenz.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            const STORAGE_KEY = 'stockschiessen_tracker_v1';
+            const LONG_PRESS_DURATION = 500; // 500ms Haltedauer für Dekrement (-1)
+
+            // Anwendungszustand (State)
+            let state = {
+                counts: {
+                    full: 0,
+                    half: 0,
+                    miss: 0
+                },
+                history: [] // Array von Objekten: { id, shotNumber, type, timestamp }
+            };
+
+            // Konfiguration der drei Kategorien
+            const CATEGORY_CONFIG = {
+                full: {
+                    label: 'Voll getroffen',
+                    shortLabel: 'Voll',
+                    badgeClass: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+                    dotClass: 'bg-emerald-400'
+                },
+                half: {
+                    label: 'Halb getroffen',
+                    shortLabel: 'Halb',
+                    badgeClass: 'bg-amber-400/15 text-amber-300 border-amber-400/30',
+                    dotClass: 'bg-amber-400'
+                },
+                miss: {
+                    label: 'Nicht getroffen',
+                    shortLabel: 'Nicht',
+                    badgeClass: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+                    dotClass: 'bg-rose-400'
+                }
+            };
+
+            // DOM-Elemente referenzieren
+            const elCountFull = document.getElementById('count-full');
+            const elCountHalf = document.getElementById('count-half');
+            const elCountMiss = document.getElementById('count-miss');
+
+            const elStatTotal = document.getElementById('stat-total');
+            const elStatScore = document.getElementById('stat-score');
+            const elBarFull = document.getElementById('bar-full');
+            const elBarHalf = document.getElementById('bar-half');
+            const elBarMiss = document.getElementById('bar-miss');
+            const elPctFull = document.getElementById('pct-full');
+            const elPctHalf = document.getElementById('pct-half');
+            const elPctMiss = document.getElementById('pct-miss');
+
+            const elHistoryList = document.getElementById('history-list');
+            const elHistoryEmpty = document.getElementById('history-empty');
+            const elHistoryBadge = document.getElementById('history-count-badge');
+
+            const elResetModal = document.getElementById('reset-modal');
+            const btnResetOpen = document.getElementById('btn-reset-open');
+            const btnResetCancel = document.getElementById('btn-reset-cancel');
+            const btnResetConfirm = document.getElementById('btn-reset-confirm');
+
+            const elToastContainer = document.getElementById('toast-container');
+            const elToastText = document.getElementById('toast-text');
+            const elToastIcon = document.getElementById('toast-icon');
+            let toastTimeout = null;
+
+            /**
+             * Zeigt eine kurze, unaufdringliche Info-Nachricht (Toast) an
+             */
+            function showToast(text, icon = 'ℹ️') {
+                elToastText.textContent = text;
+                elToastIcon.textContent = icon;
+                elToastContainer.classList.remove('opacity-0', 'translate-y-4');
+                elToastContainer.classList.add('opacity-100', 'translate-y-0');
+
+                if (toastTimeout) clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    elToastContainer.classList.remove('opacity-100', 'translate-y-0');
+                    elToastContainer.classList.add('opacity-0', 'translate-y-4');
+                }, 2200);
+            }
+
+            /**
+             * Löst sanftes haptisches Feedback aus (falls vom Gerät unterstützt)
+             */
+            function triggerHaptic(pattern = 25) {
+                if (navigator.vibrate) {
+                    try {
+                        navigator.vibrate(pattern);
+                    } catch (e) {
+                        // Ignorieren, falls blockiert
+                    }
+                }
+            }
+
+            /**
+             * Lädt gespeicherte Daten aus dem localStorage
+             */
+            function loadState() {
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        if (parsed && parsed.counts && Array.isArray(parsed.history)) {
+                            state = parsed;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Fehler beim Laden aus localStorage:', error);
+                }
+            }
+
+            /**
+             * Speichert aktuellen Zustand im localStorage
+             */
+            function saveState() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                } catch (error) {
+                    console.error('Fehler beim Speichern in localStorage:', error);
+                }
+            }
+
+            /**
+             * Formatiert die aktuelle Uhrzeit (HH:MM:SS)
+             */
+            function formatTime(dateObj) {
+                return dateObj.toLocaleTimeString('de-DE', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            }
+
+            /**
+             * Erhöht den Zähler einer Kategorie um +1 und fügt einen Historien-Eintrag hinzu
+             */
+            function incrementCategory(type) {
+                if (!CATEGORY_CONFIG[type]) return;
+
+                state.counts[type] += 1;
+                const totalShots = state.counts.full + state.counts.half + state.counts.miss;
+
+                const entry = {
+                    id: Date.now() + Math.random().toString(36).substring(2, 6),
+                    shotNumber: totalShots,
+                    type: type,
+                    timestamp: formatTime(new Date())
+                };
+
+                // Neuesten Eintrag an den Anfang setzen
+                state.history.unshift(entry);
+
+                triggerHaptic(30);
+                saveState();
+                renderUI(true);
+            }
+
+            /**
+             * Verringert den Zähler einer Kategorie um -1 (nicht unter 0)
+             * und entfernt den letzten passenden Eintrag aus der Historie
+             */
+            function decrementCategory(type) {
+                if (!CATEGORY_CONFIG[type]) return;
+
+                if (state.counts[type] <= 0) {
+                    showToast(`${CATEGORY_CONFIG[type].label} ist bereits auf 0`, '⚠️');
+                    triggerHaptic([30, 40, 30]);
+                    return;
+                }
+
+                state.counts[type] -= 1;
+
+                // Den jüngsten Eintrag dieses Typs in der Historie suchen und entfernen
+                const indexToRemove = state.history.findIndex(item => item.type === type);
+                if (indexToRemove !== -1) {
+                    state.history.splice(indexToRemove, 1);
+                }
+
+                // Wurf-Nummern in der Historie sauber neu durchnummerieren (neueste = höchste Nummer)
+                const remainingCount = state.history.length;
+                state.history.forEach((item, idx) => {
+                    item.shotNumber = remainingCount - idx;
+                });
+
+                triggerHaptic([50, 40, 50]);
+                showToast(`Korrektur: ${CATEGORY_CONFIG[type].label} (-1)`, '↩️');
+                saveState();
+                renderUI(false);
+            }
+
+            /**
+             * Setzt alle Zähler und die Historie komplett zurück
+             */
+            function resetAllData() {
+                state = {
+                    counts: { full: 0, half: 0, miss: 0 },
+                    history: []
+                };
+                saveState();
+                renderUI(false);
+                closeResetModal();
+                triggerHaptic(40);
+                showToast('Alle Daten wurden zurückgesetzt', '🗑️');
+            }
+
+            /**
+             * Aktualisiert die gesamte Benutzeroberfläche (Zähler, Statistiken, Historie)
+             */
+            function renderUI(animateNewest = false) {
+                const { full, half, miss } = state.counts;
+                const total = full + half + miss;
+
+                // Einzelzähler auf den Buttons
+                elCountFull.textContent = full;
+                elCountHalf.textContent = half;
+                elCountMiss.textContent = miss;
+
+                // Gesamtversuche
+                elStatTotal.textContent = total;
+
+                // Prozentwerte und Performance-Score berechnen
+                if (total === 0) {
+                    elStatScore.textContent = '0%';
+                    elPctFull.textContent = '0%';
+                    elPctHalf.textContent = '0%';
+                    elPctMiss.textContent = '0%';
+
+                    elBarFull.style.width = '0%';
+                    elBarHalf.style.width = '0%';
+                    elBarMiss.style.width = '0%';
+                } else {
+                    const pctFull = Math.round((full / total) * 100);
+                    const pctHalf = Math.round((half / total) * 100);
+                    const pctMiss = Math.round((miss / total) * 100);
+
+                    // Gewichtete Treffer-Wertung: Voll = 1.0, Halb = 0.5, Nicht = 0.0
+                    const weightedScore = Math.round(((full * 1.0 + half * 0.5) / total) * 100);
+
+                    elStatScore.textContent = `${weightedScore}%`;
+                    elPctFull.textContent = `${pctFull}%`;
+                    elPctHalf.textContent = `${pctHalf}%`;
+                    elPctMiss.textContent = `${pctMiss}%`;
+
+                    elBarFull.style.width = `${(full / total) * 100}%`;
+                    elBarHalf.style.width = `${(half / total) * 100}%`;
+                    elBarMiss.style.width = `${(miss / total) * 100}%`;
+                }
+
+                // Historie rendern
+                elHistoryBadge.textContent = `${state.history.length} ${state.history.length === 1 ? 'Eintrag' : 'Einträge'}`;
+
+                if (state.history.length === 0) {
+                    elHistoryList.innerHTML = '';
+                    elHistoryList.classList.add('hidden');
+                    elHistoryEmpty.classList.remove('hidden');
+                } else {
+                    elHistoryEmpty.classList.add('hidden');
+                    elHistoryList.classList.remove('hidden');
+
+                    elHistoryList.innerHTML = state.history.map((entry, idx) => {
+                        const cfg = CATEGORY_CONFIG[entry.type];
+                        const animClass = (animateNewest && idx === 0) ? 'animate-slide-in' : '';
+                        return `
+                            <div class="${animClass} flex items-center justify-between bg-slate-950/70 border border-slate-800/90 rounded-xl px-3.5 py-2.5">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs font-mono font-bold text-slate-400 bg-slate-900 border border-slate-800 px-2 py-1 rounded-lg min-w-[2.5rem] text-center">
+                                        #${entry.shotNumber}
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border ${cfg.badgeClass}">
+                                        <span class="w-1.5 h-1.5 rounded-full ${cfg.dotClass}"></span>
+                                        ${cfg.label}
+                                    </span>
+                                </div>
+                                <span class="text-xs font-mono text-slate-500">${entry.timestamp}</span>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            /**
+             * Richtet die kombinierte Tap (+1) und Long-Press (-1) Logik
+             * für Maus- und Touch-Events ein (Pointer Events + Fallbacks)
+             */
+            function setupActionButtons() {
+                const buttons = document.querySelectorAll('.action-btn');
+
+                buttons.forEach(btn => {
+                    const type = btn.getAttribute('data-type');
+                    let pressTimer = null;
+                    let isLongPress = false;
+                    let isPressing = false;
+                    let startX = 0;
+                    let startY = 0;
+
+                    // Kontextmenü (Rechtsklick / langes Tippen auf Android/iOS) unterdrücken
+                    btn.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return false;
+                    });
+
+                    const startPress = (clientX, clientY) => {
+                        if (isPressing) return;
+                        isPressing = true;
+                        isLongPress = false;
+                        startX = clientX;
+                        startY = clientY;
+
+                        // Visuellen Ladebalken starten
+                        btn.classList.add('holding');
+
+                        pressTimer = setTimeout(() => {
+                            isLongPress = true;
+                            btn.classList.remove('holding');
+                            decrementCategory(type);
+                        }, LONG_PRESS_DURATION);
+                    };
+
+                    const cancelPress = () => {
+                        if (!isPressing) return;
+                        clearTimeout(pressTimer);
+                        btn.classList.remove('holding');
+                        isPressing = false;
+                    };
+
+                    const endPress = () => {
+                        if (!isPressing) return;
+                        clearTimeout(pressTimer);
+                        btn.classList.remove('holding');
+
+                        // Wenn es kein Long-Press war, als regulären Klick (+1) werten
+                        if (!isLongPress) {
+                            incrementCategory(type);
+                        }
+                        isPressing = false;
+                    };
+
+                    // Pointer Events (moderne Browser, Touch & Maus vereint)
+                    btn.addEventListener('pointerdown', (e) => {
+                        // Nur Hauptmaustaste (links) oder Touch erlauben
+                        if (e.pointerType === 'mouse' && e.button !== 0) return;
+                        startPress(e.clientX, e.clientY);
+                    });
+
+                    btn.addEventListener('pointermove', (e) => {
+                        if (!isPressing) return;
+                        // Abbrechen, falls der Finger beim Scrollen zu weit verrutscht (> 15px)
+                        const moveX = Math.abs(e.clientX - startX);
+                        const moveY = Math.abs(e.clientY - startY);
+                        if (moveX > 15 || moveY > 15) {
+                            cancelPress();
+                        }
+                    });
+
+                    btn.addEventListener('pointerup', () => {
+                        endPress();
+                    });
+
+                    btn.addEventListener('pointerleave', () => {
+                        cancelPress();
+                    });
+
+                    btn.addEventListener('pointercancel', () => {
+                        cancelPress();
+                    });
+
+                    // Tastatur-Unterstützung (Enter / Leertaste für Barrierefreiheit)
+                    btn.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            if (!e.repeat) {
+                                incrementCategory(type);
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Modal-Steuerung für Zurücksetzen
+            function openResetModal() {
+                elResetModal.classList.remove('hidden');
+                elResetModal.classList.add('flex');
+            }
+
+            function closeResetModal() {
+                elResetModal.classList.add('hidden');
+                elResetModal.classList.remove('flex');
+            }
+
+            btnResetOpen.addEventListener('click', openResetModal);
+            btnResetCancel.addEventListener('click', closeResetModal);
+            btnResetConfirm.addEventListener('click', resetAllData);
+
+            // Schließen des Modals bei Klick auf den Hintergrund
+            elResetModal.addEventListener('click', (e) => {
+                if (e.target === elResetModal) {
+                    closeResetModal();
+                }
+            });
+
+            // App initialisieren
+            loadState();
+            setupActionButtons();
+            renderUI(false);
+        });
+    </script>
+</body>
+</html>
