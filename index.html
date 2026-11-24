@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stock-Tracker – Spielstand & Performance</title>
+    <title>Stockschiessen-Performance – Spielstand & Performance</title>
     <style>
         :root {
             --bg: #0f172a;
@@ -48,7 +48,7 @@
 
         .container {
             width: 100%;
-            max-width: 520px;
+            max-width: 540px;
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -71,20 +71,22 @@
             gap: 8px;
         }
 
-        .btn-reset {
-            background-color: rgba(239, 68, 68, 0.15);
+        .btn-reset-full {
+            width: 100%;
+            background-color: rgba(239, 68, 68, 0.16);
             color: #fca5a5;
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            border: 1px solid rgba(239, 68, 68, 0.45);
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.15s ease;
+            margin-top: 4px;
         }
 
-        .btn-reset:active {
-            transform: scale(0.95);
+        .btn-reset-full:active {
+            transform: scale(0.985);
             background-color: rgba(239, 68, 68, 0.3);
         }
 
@@ -299,11 +301,36 @@
             color: var(--text-muted);
         }
 
-        /* Schuss-Buttons */
-        .controls {
+        /* Zweispaltige Schuss- & Maß-Erfassung */
+        .controls-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
+        }
+
+        .controls-columns-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 0 4px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            text-align: center;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .controls-col {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .track-btn {
@@ -311,10 +338,11 @@
             overflow: hidden;
             border: none;
             border-radius: 16px;
-            padding: 18px 20px;
+            padding: 14px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 8px;
             color: #fff;
             cursor: pointer;
             transition: transform 0.1s ease;
@@ -334,29 +362,33 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 3px;
+            gap: 2px;
             z-index: 2;
+            min-width: 0;
         }
 
         .btn-title {
-            font-size: 1.2rem;
+            font-size: 0.98rem;
             font-weight: 700;
+            line-height: 1.2;
         }
 
         .btn-sub {
-            font-size: 0.8rem;
-            opacity: 0.85;
+            font-size: 0.72rem;
+            opacity: 0.88;
+            line-height: 1.25;
         }
 
         .btn-count {
-            font-size: 2rem;
+            font-size: 1.55rem;
             font-weight: 800;
             background: rgba(0, 0, 0, 0.22);
-            padding: 6px 16px;
-            border-radius: 12px;
-            min-width: 64px;
+            padding: 5px 10px;
+            border-radius: 11px;
+            min-width: 44px;
             text-align: center;
             z-index: 2;
+            flex-shrink: 0;
         }
 
         /* Gemeinsamer Long-Press Ladebalken */
@@ -385,7 +417,6 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            flex: 1;
         }
 
         .history-header {
@@ -419,10 +450,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 8px;
             background-color: rgba(15, 23, 42, 0.5);
             padding: 10px 12px;
             border-radius: 10px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             animation: fadeIn 0.2s ease;
         }
 
@@ -434,14 +466,24 @@
         .history-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .shot-num {
             font-size: 0.75rem;
             font-weight: 700;
+            color: var(--accent);
+            background: rgba(56, 189, 248, 0.14);
+            padding: 2px 7px;
+            border-radius: 6px;
+        }
+
+        .cat-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
             color: var(--text-muted);
-            background: var(--surface);
+            background: rgba(148, 163, 184, 0.14);
             padding: 2px 7px;
             border-radius: 6px;
         }
@@ -450,7 +492,7 @@
             font-weight: 600;
             padding: 3px 9px;
             border-radius: 6px;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
         }
 
         .badge-miss { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
@@ -458,8 +500,9 @@
         .badge-full { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
 
         .history-time {
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             color: var(--text-muted);
+            white-space: nowrap;
         }
 
         .empty-state {
@@ -536,8 +579,7 @@
 
 <div class="container">
     <header>
-        <h1>🥌 Stock-Tracker</h1>
-        <button class="btn-reset" id="openResetModal">Alles zurücksetzen</button>
+        <h1>🥌 Stockschiessen-Performance</h1>
     </header>
 
     <!-- Spielstand ganz oben -->
@@ -594,61 +636,102 @@
         </div>
 
         <div class="legend">
-            <span><i class="dot" style="background: var(--full)"></i>Voll: <strong id="pctFull">0%</strong></span>
-            <span><i class="dot" style="background: var(--half)"></i>Halb: <strong id="pctHalf">0%</strong></span>
-            <span><i class="dot" style="background: var(--miss)"></i>Nicht: <strong id="pctMiss">0%</strong></span>
+            <span><i class="dot" style="background: var(--full)"></i>1 Pkt.: <strong id="pctFull">0%</strong></span>
+            <span><i class="dot" style="background: var(--half)"></i>0,5 Pkt.: <strong id="pctHalf">0%</strong></span>
+            <span><i class="dot" style="background: var(--miss)"></i>0 Pkt.: <strong id="pctMiss">0%</strong></span>
         </div>
     </section>
 
     <div class="hint">Tippen = +1  •  Gedrückt halten (0,55s) = -1</div>
 
-    <!-- Schusserfassung -->
-    <section class="controls">
-        <button class="track-btn btn-full" data-type="full">
-            <div class="btn-info">
-                <span class="btn-title">Voll getroffen</span>
-                <span class="btn-sub">100% Wertung (1,0 Pkt.)</span>
-            </div>
-            <div class="btn-count" id="countFull">0</div>
-            <div class="hold-progress"></div>
-        </button>
+    <!-- Zweispaltige Erfassung: Links Maß-Schub/Aufsteller, Rechts Schuss -->
+    <section class="controls-wrapper">
+        <div class="controls-columns-header">
+            <span>Maß-Schub / Aufsteller</span>
+            <span>Schuss</span>
+        </div>
+        <div class="controls-grid">
+            <!-- Linke Spalte: Maß-Schub / Aufsteller -->
+            <div class="controls-col">
+                <button class="track-btn btn-full" data-kind="measure" data-level="perfect">
+                    <div class="btn-info">
+                        <span class="btn-title">Perfekt</span>
+                        <span class="btn-sub">Maß · 1,0 Pkt.</span>
+                    </div>
+                    <div class="btn-count" id="countMeasurePerfect">0</div>
+                    <div class="hold-progress"></div>
+                </button>
 
-        <button class="track-btn btn-half" data-type="half">
-            <div class="btn-info">
-                <span class="btn-title">Halb getroffen</span>
-                <span class="btn-sub">50% Wertung (0,5 Pkt.)</span>
-            </div>
-            <div class="btn-count" id="countHalf">0</div>
-            <div class="hold-progress"></div>
-        </button>
+                <button class="track-btn btn-half" data-kind="measure" data-level="average">
+                    <div class="btn-info">
+                        <span class="btn-title">Mittelmäßig</span>
+                        <span class="btn-sub">Maß · 0,5 Pkt.</span>
+                    </div>
+                    <div class="btn-count" id="countMeasureAverage">0</div>
+                    <div class="hold-progress"></div>
+                </button>
 
-        <button class="track-btn btn-miss" data-type="miss">
-            <div class="btn-info">
-                <span class="btn-title">Nicht getroffen</span>
-                <span class="btn-sub">0% Wertung (0,0 Pkt.)</span>
+                <button class="track-btn btn-miss" data-kind="measure" data-level="poor">
+                    <div class="btn-info">
+                        <span class="btn-title">Schlecht</span>
+                        <span class="btn-sub">Maß · 0,0 Pkt.</span>
+                    </div>
+                    <div class="btn-count" id="countMeasurePoor">0</div>
+                    <div class="hold-progress"></div>
+                </button>
             </div>
-            <div class="btn-count" id="countMiss">0</div>
-            <div class="hold-progress"></div>
-        </button>
+
+            <!-- Rechte Spalte: Schuss -->
+            <div class="controls-col">
+                <button class="track-btn btn-full" data-kind="shot" data-level="perfect">
+                    <div class="btn-info">
+                        <span class="btn-title">Voll getroffen</span>
+                        <span class="btn-sub">Schuss · 1,0 Pkt.</span>
+                    </div>
+                    <div class="btn-count" id="countShotPerfect">0</div>
+                    <div class="hold-progress"></div>
+                </button>
+
+                <button class="track-btn btn-half" data-kind="shot" data-level="average">
+                    <div class="btn-info">
+                        <span class="btn-title">Halb getroffen</span>
+                        <span class="btn-sub">Schuss · 0,5 Pkt.</span>
+                    </div>
+                    <div class="btn-count" id="countShotAverage">0</div>
+                    <div class="hold-progress"></div>
+                </button>
+
+                <button class="track-btn btn-miss" data-kind="shot" data-level="poor">
+                    <div class="btn-info">
+                        <span class="btn-title">Nicht getroffen</span>
+                        <span class="btn-sub">Schuss · 0,0 Pkt.</span>
+                    </div>
+                    <div class="btn-count" id="countShotPoor">0</div>
+                    <div class="hold-progress"></div>
+                </button>
+            </div>
+        </div>
     </section>
 
-    <!-- Historie (nur Würfe) -->
+    <!-- Schuss-Historie -->
     <section class="history-section">
         <div class="history-header">
-            <h2>Wurf-Historie</h2>
+            <h2>Schuss-Historie</h2>
             <span style="font-size: 0.78rem; color: var(--text-muted);" id="historyCount">0 Versuche</span>
         </div>
         <ul class="history-list" id="historyList">
             <li class="empty-state">Noch keine Versuche erfasst.</li>
         </ul>
     </section>
+
+    <button class="btn-reset-full" id="openResetModal">Alles zurücksetzen</button>
 </div>
 
 <!-- Bestätigungs-Modal: Alles zurücksetzen -->
 <div class="modal-backdrop" id="resetModal">
     <div class="modal">
         <h3>Alle Daten zurücksetzen?</h3>
-        <p>Spielstand, alle Wurf-Zähler und die gesamte Wurf-Historie werden unwiderruflich gelöscht.</p>
+        <p>Spielstand, alle Zähler und die gesamte Schuss-Historie werden unwiderruflich gelöscht.</p>
         <div class="modal-actions">
             <button class="btn-cancel" id="cancelReset">Abbrechen</button>
             <button class="btn-confirm-reset" id="confirmReset">Ja, alles löschen</button>
@@ -660,7 +743,7 @@
 <div class="modal-backdrop" id="scoreResetModal">
     <div class="modal">
         <h3>Spielstand auf 0 : 0 setzen?</h3>
-        <p>Deine Wurf-Statistik und die Treffer-Zähler bleiben dabei vollständig erhalten.</p>
+        <p>Deine Performance-Statistik und die Zähler bleiben dabei vollständig erhalten.</p>
         <div class="modal-actions">
             <button class="btn-cancel" id="cancelScoreReset">Abbrechen</button>
             <button class="btn-confirm-reset" id="confirmScoreReset">Spielstand 0:0</button>
@@ -668,11 +751,11 @@
     </div>
 </div>
 
-<!-- Bestätigungs-Modal: Nur Performance inkl. Wurfhistorie zurücksetzen -->
+<!-- Bestätigungs-Modal: Performance inkl. Schuss-Historie zurücksetzen -->
 <div class="modal-backdrop" id="perfResetModal">
     <div class="modal">
-        <h3>Performance & Wurfhistorie zurücksetzen?</h3>
-        <p>Alle Treffer-Zähler, Statistiken und die Wurf-Historie werden gelöscht. Der Spielstand bleibt erhalten.</p>
+        <h3>Performance & Schuss-Historie zurücksetzen?</h3>
+        <p>Alle Zähler, Statistiken und die Schuss-Historie werden gelöscht. Der Spielstand bleibt erhalten.</p>
         <div class="modal-actions">
             <button class="btn-cancel" id="cancelPerfReset">Abbrechen</button>
             <button class="btn-confirm-reset" id="confirmPerfReset">Performance löschen</button>
@@ -683,19 +766,39 @@
 <div class="toast" id="toast"></div>
 
 <script>
-    const STORAGE_KEY = 'stock_tracker_data_v3';
+    const STORAGE_KEY = 'stockschiessen_performance_data_v4';
     const LONG_PRESS_DURATION = 550;
+    const ENDS_PER_GAME = 6; // Ein Spiel besteht aus 6 Kehren (K1..K6)
+
+    function createEmptyCounts() {
+        return {
+            measure: { perfect: 0, average: 0, poor: 0 },
+            shot: { perfect: 0, average: 0, poor: 0 }
+        };
+    }
 
     let state = {
         scores: { a: 0, b: 0 },
-        counts: { full: 0, half: 0, miss: 0 },
-        history: []
+        counts: createEmptyCounts(),
+        history: [] // Chronologisch (ältester Eintrag zuerst); Anzeige neueste oben
     };
 
-    const labels = {
-        full: { text: 'Voll getroffen', badge: 'badge-full' },
-        half: { text: 'Halb getroffen', badge: 'badge-half' },
-        miss: { text: 'Nicht getroffen', badge: 'badge-miss' }
+    const kindNames = {
+        measure: 'Maß / Aufsteller',
+        shot: 'Schuss'
+    };
+
+    const levelLabels = {
+        measure: {
+            perfect: { text: 'Perfekt (1 Pkt.)', badge: 'badge-full' },
+            average: { text: 'Mittelmäßig (0,5 Pkt.)', badge: 'badge-half' },
+            poor: { text: 'Schlecht (0 Pkt.)', badge: 'badge-miss' }
+        },
+        shot: {
+            perfect: { text: 'Voll getroffen', badge: 'badge-full' },
+            average: { text: 'Halb getroffen', badge: 'badge-half' },
+            poor: { text: 'Nicht getroffen', badge: 'badge-miss' }
+        }
     };
 
     const teamNames = {
@@ -703,22 +806,79 @@
         b: 'Gegner'
     };
 
+    // Schema S<Spiel>K<Kehre1..6>:
+    // Versuch 1..6 -> S1K1..S1K6, Versuch 7..12 -> S2K1..S2K6, usw.
+    function formatGameEndCode(oneBasedIndex) {
+        const spiel = Math.floor((oneBasedIndex - 1) / ENDS_PER_GAME) + 1;
+        const kehre = ((oneBasedIndex - 1) % ENDS_PER_GAME) + 1;
+        return `S${spiel}K${kehre}`;
+    }
+
+    function migrateLegacyType(type) {
+        if (type === 'full') return 'perfect';
+        if (type === 'half') return 'average';
+        if (type === 'miss') return 'poor';
+        return null;
+    }
+
     function loadState() {
         try {
-            const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('stock_tracker_data_v2');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                if (parsed && parsed.counts && Array.isArray(parsed.history)) {
-                    const shotHistory = parsed.history.filter(
-                        item => (item.category === 'shot' || !item.category) && labels[item.type]
-                    );
-                    state = {
-                        scores: parsed.scores || { a: 0, b: 0 },
-                        counts: parsed.counts,
-                        history: shotHistory
-                    };
-                }
+            const saved =
+                localStorage.getItem(STORAGE_KEY) ||
+                localStorage.getItem('stockschiessen_performance_data_v3') ||
+                localStorage.getItem('stockschiessen_performance_data_v2') ||
+                localStorage.getItem('stockschiessen_performance_data_v1') ||
+                localStorage.getItem('stock_tracker_data_v3') ||
+                localStorage.getItem('stock_tracker_data_v2');
+            if (!saved) return;
+
+            const parsed = JSON.parse(saved);
+            if (!parsed) return;
+
+            const counts = createEmptyCounts();
+            if (parsed.counts && parsed.counts.measure && parsed.counts.shot) {
+                counts.measure.perfect = Number(parsed.counts.measure.perfect) || 0;
+                counts.measure.average = Number(parsed.counts.measure.average) || 0;
+                counts.measure.poor = Number(parsed.counts.measure.poor) || 0;
+                counts.shot.perfect = Number(parsed.counts.shot.perfect) || 0;
+                counts.shot.average = Number(parsed.counts.shot.average) || 0;
+                counts.shot.poor = Number(parsed.counts.shot.poor) || 0;
+            } else if (parsed.counts) {
+                counts.shot.perfect = Number(parsed.counts.full) || 0;
+                counts.shot.average = Number(parsed.counts.half) || 0;
+                counts.shot.poor = Number(parsed.counts.miss) || 0;
             }
+
+            let cleanedHistory = Array.isArray(parsed.history)
+                ? parsed.history
+                    .filter(item => (item.category === 'shot' || !item.category))
+                    .map(item => {
+                        const kind = item.kind === 'measure' ? 'measure' : 'shot';
+                        const level = item.level || migrateLegacyType(item.type);
+                        if (!level || !levelLabels[kind][level]) return null;
+                        return {
+                            id: item.id || (Date.now() + Math.random()),
+                            kind,
+                            level,
+                            time: item.time || ''
+                        };
+                    })
+                    .filter(Boolean)
+                : [];
+
+            // v1/v2 speicherten newest-first; ab v3 chronologisch (oldest-first)
+            const hasChronoStorage =
+                Boolean(localStorage.getItem(STORAGE_KEY)) ||
+                Boolean(localStorage.getItem('stockschiessen_performance_data_v3'));
+            if (!hasChronoStorage && cleanedHistory.length > 1) {
+                cleanedHistory = cleanedHistory.reverse();
+            }
+
+            state = {
+                scores: parsed.scores || { a: 0, b: 0 },
+                counts,
+                history: cleanedHistory
+            };
         } catch (e) { console.error(e); }
     }
 
@@ -749,11 +909,12 @@
         });
     }
 
-    function incrementShot(type) {
-        state.counts[type]++;
-        state.history.unshift({
+    function incrementAttempt(kind, level) {
+        state.counts[kind][level]++;
+        state.history.push({
             id: Date.now() + Math.random(),
-            type: type,
+            kind,
+            level,
             time: getTimeStr()
         });
 
@@ -762,18 +923,22 @@
         render();
     }
 
-    function decrementShot(type) {
-        if (state.counts[type] <= 0) {
+    function decrementAttempt(kind, level) {
+        if (state.counts[kind][level] <= 0) {
             showToast('Zähler ist bereits bei 0');
             return;
         }
 
-        state.counts[type]--;
-        const indexToRemove = state.history.findIndex(item => item.type === type);
-        if (indexToRemove !== -1) state.history.splice(indexToRemove, 1);
+        state.counts[kind][level]--;
+        for (let i = state.history.length - 1; i >= 0; i--) {
+            if (state.history[i].kind === kind && state.history[i].level === level) {
+                state.history.splice(i, 1);
+                break;
+            }
+        }
 
         vibrate([40, 40, 40]);
-        showToast(`${labels[type].text}: -1 korrigiert`);
+        showToast(`${kindNames[kind]} (${levelLabels[kind][level].text}): -1 korrigiert`);
         saveState();
         render();
     }
@@ -807,39 +972,55 @@
     }
 
     function resetPerformanceOnly() {
-        state.counts = { full: 0, half: 0, miss: 0 };
+        state.counts = createEmptyCounts();
         state.history = [];
         vibrate([30, 30]);
         saveState();
         render();
-        showToast('Performance & Wurfhistorie zurückgesetzt');
+        showToast('Performance & Schuss-Historie zurückgesetzt');
+    }
+
+    function getTotalAttempts() {
+        const m = state.counts.measure;
+        const s = state.counts.shot;
+        return m.perfect + m.average + m.poor + s.perfect + s.average + s.poor;
     }
 
     function render() {
         document.getElementById('scoreA').textContent = state.scores.a;
         document.getElementById('scoreB').textContent = state.scores.b;
 
-        const { full, half, miss } = state.counts;
-        const total = full + half + miss;
+        const m = state.counts.measure;
+        const s = state.counts.shot;
 
-        document.getElementById('countFull').textContent = full;
-        document.getElementById('countHalf').textContent = half;
-        document.getElementById('countMiss').textContent = miss;
+        document.getElementById('countMeasurePerfect').textContent = m.perfect;
+        document.getElementById('countMeasureAverage').textContent = m.average;
+        document.getElementById('countMeasurePoor').textContent = m.poor;
+
+        document.getElementById('countShotPerfect').textContent = s.perfect;
+        document.getElementById('countShotAverage').textContent = s.average;
+        document.getElementById('countShotPoor').textContent = s.poor;
+
+        const fullCount = m.perfect + s.perfect;
+        const halfCount = m.average + s.average;
+        const missCount = m.poor + s.poor;
+        const total = fullCount + halfCount + missCount;
+
         document.getElementById('totalShots').textContent = total;
 
-        const points = full * 1.0 + half * 0.5;
+        const points = fullCount * 1.0 + halfCount * 0.5;
         document.getElementById('pointsSum').textContent = points.toFixed(1).replace('.', ',');
 
         const scorePct = total > 0 ? Math.round((points / total) * 100) : 0;
         document.getElementById('hitScore').textContent = `${scorePct}%`;
 
-        document.getElementById('pctFull').textContent = `${total > 0 ? Math.round((full / total) * 100) : 0}%`;
-        document.getElementById('pctHalf').textContent = `${total > 0 ? Math.round((half / total) * 100) : 0}%`;
-        document.getElementById('pctMiss').textContent = `${total > 0 ? Math.round((miss / total) * 100) : 0}%`;
+        document.getElementById('pctFull').textContent = `${total > 0 ? Math.round((fullCount / total) * 100) : 0}%`;
+        document.getElementById('pctHalf').textContent = `${total > 0 ? Math.round((halfCount / total) * 100) : 0}%`;
+        document.getElementById('pctMiss').textContent = `${total > 0 ? Math.round((missCount / total) * 100) : 0}%`;
 
-        document.getElementById('barFull').style.width = `${total > 0 ? (full / total) * 100 : 0}%`;
-        document.getElementById('barHalf').style.width = `${total > 0 ? (half / total) * 100 : 0}%`;
-        document.getElementById('barMiss').style.width = `${total > 0 ? (miss / total) * 100 : 0}%`;
+        document.getElementById('barFull').style.width = `${total > 0 ? (fullCount / total) * 100 : 0}%`;
+        document.getElementById('barHalf').style.width = `${total > 0 ? (halfCount / total) * 100 : 0}%`;
+        document.getElementById('barMiss').style.width = `${total > 0 ? (missCount / total) * 100 : 0}%`;
 
         const historyList = document.getElementById('historyList');
         document.getElementById('historyCount').textContent = `${state.history.length} ${state.history.length === 1 ? 'Versuch' : 'Versuche'}`;
@@ -847,13 +1028,20 @@
         if (state.history.length === 0) {
             historyList.innerHTML = '<li class="empty-state">Noch keine Versuche erfasst.</li>';
         } else {
-            historyList.innerHTML = state.history.map((item, idx) => {
-                const shotNumber = state.history.length - idx;
-                const info = labels[item.type];
+            const entriesNewestFirst = state.history
+                .map((item, chronoIdx) => ({
+                    item,
+                    code: formatGameEndCode(chronoIdx + 1)
+                }))
+                .reverse();
+
+            historyList.innerHTML = entriesNewestFirst.map(({ item, code }) => {
+                const info = levelLabels[item.kind][item.level];
                 return `
                     <li class="history-item">
                         <div class="history-left">
-                            <span class="shot-num">#${shotNumber}</span>
+                            <span class="shot-num">${code}</span>
+                            <span class="cat-tag">${kindNames[item.kind]}</span>
                             <span class="badge ${info.badge}">${info.text}</span>
                         </div>
                         <span class="history-time">${item.time}</span>
@@ -912,8 +1100,9 @@
     });
 
     document.querySelectorAll('.track-btn').forEach(btn => {
-        const type = btn.dataset.type;
-        attachPressHandlers(btn, () => incrementShot(type), () => decrementShot(type));
+        const kind = btn.dataset.kind;
+        const level = btn.dataset.level;
+        attachPressHandlers(btn, () => incrementAttempt(kind, level), () => decrementAttempt(kind, level));
     });
 
     const resetModal = document.getElementById('resetModal');
@@ -922,7 +1111,7 @@
     document.getElementById('confirmReset').addEventListener('click', () => {
         state = {
             scores: { a: 0, b: 0 },
-            counts: { full: 0, half: 0, miss: 0 },
+            counts: createEmptyCounts(),
             history: []
         };
         saveState();
@@ -953,8 +1142,7 @@
 
     const perfResetModal = document.getElementById('perfResetModal');
     document.getElementById('openPerfResetModal').addEventListener('click', () => {
-        const total = state.counts.full + state.counts.half + state.counts.miss;
-        if (total === 0 && state.history.length === 0) {
+        if (getTotalAttempts() === 0 && state.history.length === 0) {
             showToast('Performance ist bereits leer');
             return;
         }
