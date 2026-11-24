@@ -71,6 +71,11 @@
             gap: 8px;
         }
 
+        .eisstock-icon {
+            flex-shrink: 0;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+        }
+
         .btn-reset-full {
             width: 100%;
             background-color: rgba(239, 68, 68, 0.16);
@@ -303,9 +308,13 @@
 
         /* Zweispaltige Schuss- & Maß-Erfassung */
         .controls-wrapper {
+            background-color: var(--surface);
+            border-radius: 16px;
+            padding: 14px;
+            border: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
         .controls-columns-header {
@@ -417,7 +426,7 @@
 
         .holding .hold-progress {
             width: 100%;
-            transition: width 550ms linear;
+            transition: width 500ms linear;
         }
 
         /* Historie */
@@ -611,8 +620,18 @@
 
 <div class="container">
     <header>
-        <h1>🥌 Stockschiessen-Performance</h1>
+        <h1><svg class="eisstock-icon" viewBox="0 0 28 28" width="24" height="24" aria-hidden="true">
+                <!-- Laufsohle / Gleitfläche -->
+                <rect x="4" y="19" width="20" height="4.5" rx="2.25" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1"/>
+                <!-- Stockkörper -->
+                <rect x="6.5" y="13.5" width="15" height="6" rx="3" fill="#38bdf8" stroke="#7dd3fc" stroke-width="1"/>
+                <!-- Stiel -->
+                <path d="M14 13.5 L15.5 4.5" stroke="#f8fafc" stroke-width="2.4" stroke-linecap="round"/>
+                <!-- Griffknauf -->
+                <circle cx="15.7" cy="4.2" r="2.1" fill="#f59e0b"/>
+            </svg> Stockschiessen-Performance</h1>
     </header>
+    <div class="hint">Tippen = +1  •  Gedrückt halten (0,5s) = -1</div>
 
     <!-- Spielstand ganz oben -->
     <section class="scoreboard-card">
@@ -639,42 +658,6 @@
             </button>
         </div>
     </section>
-
-    <!-- Statistik-Übersicht -->
-    <section class="stats-card">
-        <div class="stats-header">
-            <span class="stats-title">Performance</span>
-            <button class="btn-reset-sm" id="openPerfResetModal">Performance zurücksetzen</button>
-        </div>
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div class="stat-value" id="totalShots">0</div>
-                <div class="stat-label">Versuche</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value highlight" id="hitScore">0%</div>
-                <div class="stat-label">Treffer-Quote</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value" id="pointsSum">0,0</div>
-                <div class="stat-label">Wertungspunkte</div>
-            </div>
-        </div>
-
-        <div class="progress-bar">
-            <div class="bar-segment bar-full" id="barFull" style="width: 0%"></div>
-            <div class="bar-segment bar-half" id="barHalf" style="width: 0%"></div>
-            <div class="bar-segment bar-miss" id="barMiss" style="width: 0%"></div>
-        </div>
-
-        <div class="legend">
-            <span><i class="dot" style="background: var(--full)"></i>1 Pkt.: <strong id="pctFull">0%</strong></span>
-            <span><i class="dot" style="background: var(--half)"></i>0,5 Pkt.: <strong id="pctHalf">0%</strong></span>
-            <span><i class="dot" style="background: var(--miss)"></i>0 Pkt.: <strong id="pctMiss">0%</strong></span>
-        </div>
-    </section>
-
-    <div class="hint">Tippen = +1  •  Gedrückt halten (0,55s) = -1</div>
 
     <!-- Zweispaltige Erfassung: Links Maß-Schub/Aufsteller, Rechts Schuss -->
     <section class="controls-wrapper">
@@ -745,6 +728,40 @@
         </div>
     </section>
 
+    <!-- Statistik-Übersicht -->
+    <section class="stats-card">
+        <div class="stats-header">
+            <span class="stats-title">Performance</span>
+            <button class="btn-reset-sm" id="openPerfResetModal">Performance zurücksetzen</button>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-value" id="totalShots">0</div>
+                <div class="stat-label">Versuche</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value highlight" id="hitScore">0%</div>
+                <div class="stat-label">Treffer-Quote</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="pointsSum">0,0</div>
+                <div class="stat-label">Wertungspunkte</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="bar-segment bar-full" id="barFull" style="width: 0%"></div>
+            <div class="bar-segment bar-half" id="barHalf" style="width: 0%"></div>
+            <div class="bar-segment bar-miss" id="barMiss" style="width: 0%"></div>
+        </div>
+
+        <div class="legend">
+            <span><i class="dot" style="background: var(--full)"></i>1 Pkt.: <strong id="pctFull">0%</strong></span>
+            <span><i class="dot" style="background: var(--half)"></i>0,5 Pkt.: <strong id="pctHalf">0%</strong></span>
+            <span><i class="dot" style="background: var(--miss)"></i>0 Pkt.: <strong id="pctMiss">0%</strong></span>
+        </div>
+    </section>
+
     <!-- Schuss-Historie -->
     <section class="history-section">
         <div class="history-header">
@@ -799,7 +816,7 @@
 
 <script>
     const STORAGE_KEY = 'stockschiessen_performance_data_v4';
-    const LONG_PRESS_DURATION = 550;
+    const LONG_PRESS_DURATION = 500;
     const ENDS_PER_GAME = 6; // Ein Spiel besteht aus 6 Kehren (K1..K6)
 
     function createEmptyCounts() {
@@ -839,7 +856,7 @@
     };
 
     // Schema S<Spiel>K<Kehre1..6>:
-    // Versuch 1..6 -> S1K1..S6K1, Versuch 7..12 -> S2K1..S2K6, usw.
+    // Versuch 1..6 -> S1K1..S1K6, Versuch 7..12 -> S2K1..S2K6, usw.
     function getGameAndEnd(oneBasedIndex) {
         const spiel = Math.floor((oneBasedIndex - 1) / ENDS_PER_GAME) + 1;
         const kehre = ((oneBasedIndex - 1) % ENDS_PER_GAME) + 1;
