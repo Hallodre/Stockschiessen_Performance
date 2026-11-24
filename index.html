@@ -348,56 +348,41 @@
             position: relative;
             overflow: hidden;
             border: none;
-            border-radius: 16px;
+            border-radius: 14px;
             padding: 14px 12px;
             width: 100%;
             height: 100%;
-            min-height: 76px;
             min-width: 0;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            text-align: center;
+            gap: 4px;
             color: #fff;
             cursor: pointer;
             transition: transform 0.1s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
             touch-action: manipulation;
         }
 
         .track-btn:active {
-            transform: scale(0.985);
+            transform: scale(0.97);
         }
 
         .btn-miss { background: linear-gradient(135deg, var(--miss), var(--miss-dark)); }
         .btn-half { background: linear-gradient(135deg, var(--half), var(--half-dark)); }
         .btn-full { background: linear-gradient(135deg, var(--full), var(--full-dark)); }
 
-        .btn-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            text-align: left;
-            gap: 2px;
-            z-index: 2;
-            flex: 1 1 auto;
-            min-width: 0;
-            overflow-wrap: anywhere;
-            word-break: break-word;
-        }
-
         .btn-title {
             font-size: 0.98rem;
             font-weight: 700;
             line-height: 1.2;
+            opacity: 0.92;
             max-width: 100%;
-        }
-
-        .btn-sub {
-            font-size: 0.72rem;
-            opacity: 0.88;
-            line-height: 1.25;
-            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            z-index: 2;
         }
 
         .btn-count {
@@ -407,9 +392,20 @@
             padding: 5px 10px;
             border-radius: 11px;
             min-width: 44px;
+            line-height: 1.1;
             text-align: center;
             z-index: 2;
-            flex-shrink: 0;
+        }
+
+        .btn-sub {
+            font-size: 0.72rem;
+            font-weight: 600;
+            opacity: 0.88;
+            line-height: 1.25;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            z-index: 2;
         }
 
         /* Gemeinsamer Long-Press Ladebalken */
@@ -669,29 +665,23 @@
             <!-- Linke Spalte: Maß-Schub / Aufsteller -->
             <div class="controls-col">
                 <button class="track-btn btn-full" data-kind="measure" data-level="perfect">
-                    <div class="btn-info">
-                        <span class="btn-title">Perfekt</span>
-                        <span class="btn-sub">Maß · 1,0 Pkt.</span>
-                    </div>
-                    <div class="btn-count" id="countMeasurePerfect">0</div>
+                    <span class="btn-title">Perfekt</span>
+                    <span class="btn-count" id="countMeasurePerfect">0</span>
+                    <span class="btn-sub">Maß · 1,0 Pkt.</span>
                     <div class="hold-progress"></div>
                 </button>
 
                 <button class="track-btn btn-half" data-kind="measure" data-level="average">
-                    <div class="btn-info">
-                        <span class="btn-title">Mittelmäßig</span>
-                        <span class="btn-sub">Maß · 0,5 Pkt.</span>
-                    </div>
-                    <div class="btn-count" id="countMeasureAverage">0</div>
+                    <span class="btn-title">Mittelmäßig</span>
+                    <span class="btn-count" id="countMeasureAverage">0</span>
+                    <span class="btn-sub">Maß · 0,5 Pkt.</span>
                     <div class="hold-progress"></div>
                 </button>
 
                 <button class="track-btn btn-miss" data-kind="measure" data-level="poor">
-                    <div class="btn-info">
-                        <span class="btn-title">Schlecht</span>
-                        <span class="btn-sub">Maß · 0,0 Pkt.</span>
-                    </div>
-                    <div class="btn-count" id="countMeasurePoor">0</div>
+                    <span class="btn-title">Schlecht</span>
+                    <span class="btn-count" id="countMeasurePoor">0</span>
+                    <span class="btn-sub">Maß · 0,0 Pkt.</span>
                     <div class="hold-progress"></div>
                 </button>
             </div>
@@ -699,29 +689,23 @@
             <!-- Rechte Spalte: Schuss -->
             <div class="controls-col">
                 <button class="track-btn btn-full" data-kind="shot" data-level="perfect">
-                    <div class="btn-info">
-                        <span class="btn-title">Voll getroffen</span>
-                        <span class="btn-sub">Schuss · 1,0 Pkt.</span>
-                    </div>
-                    <div class="btn-count" id="countShotPerfect">0</div>
+                    <span class="btn-title">Voll getroffen</span>
+                    <span class="btn-count" id="countShotPerfect">0</span>
+                    <span class="btn-sub">Schuss · 1,0 Pkt.</span>
                     <div class="hold-progress"></div>
                 </button>
 
                 <button class="track-btn btn-half" data-kind="shot" data-level="average">
-                    <div class="btn-info">
-                        <span class="btn-title">Halb getroffen</span>
-                        <span class="btn-sub">Schuss · 0,5 Pkt.</span>
-                    </div>
-                    <div class="btn-count" id="countShotAverage">0</div>
+                    <span class="btn-title">Halb getroffen</span>
+                    <span class="btn-count" id="countShotAverage">0</span>
+                    <span class="btn-sub">Schuss · 0,5 Pkt.</span>
                     <div class="hold-progress"></div>
                 </button>
 
                 <button class="track-btn btn-miss" data-kind="shot" data-level="poor">
-                    <div class="btn-info">
-                        <span class="btn-title">Nicht getroffen</span>
-                        <span class="btn-sub">Schuss · 0,0 Pkt.</span>
-                    </div>
-                    <div class="btn-count" id="countShotPoor">0</div>
+                    <span class="btn-title">Nicht getroffen</span>
+                    <span class="btn-count" id="countShotPoor">0</span>
+                    <span class="btn-sub">Schuss · 0,0 Pkt.</span>
                     <div class="hold-progress"></div>
                 </button>
             </div>
