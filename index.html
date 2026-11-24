@@ -323,14 +323,16 @@
 
         .controls-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
             gap: 10px;
+            align-items: stretch;
         }
 
         .controls-col {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-rows: repeat(3, minmax(0, 1fr));
             gap: 10px;
+            min-width: 0;
         }
 
         .track-btn {
@@ -339,6 +341,10 @@
             border: none;
             border-radius: 16px;
             padding: 14px 12px;
+            width: 100%;
+            height: 100%;
+            min-height: 76px;
+            min-width: 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -362,21 +368,27 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            text-align: left;
             gap: 2px;
             z-index: 2;
+            flex: 1 1 auto;
             min-width: 0;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
 
         .btn-title {
             font-size: 0.98rem;
             font-weight: 700;
             line-height: 1.2;
+            max-width: 100%;
         }
 
         .btn-sub {
             font-size: 0.72rem;
             opacity: 0.88;
             line-height: 1.25;
+            max-width: 100%;
         }
 
         .btn-count {
@@ -456,6 +468,26 @@
             border-radius: 10px;
             font-size: 0.88rem;
             animation: fadeIn 0.2s ease;
+        }
+
+        .history-divider {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 2px 4px;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .history-divider::before,
+        .history-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--border);
         }
 
         @keyframes fadeIn {
@@ -807,11 +839,11 @@
     };
 
     // Schema S<Spiel>K<Kehre1..6>:
-    // Versuch 1..6 -> S1K1..S1K6, Versuch 7..12 -> S2K1..S2K6, usw.
-    function formatGameEndCode(oneBasedIndex) {
+    // Versuch 1..6 -> S1K1..S6K1, Versuch 7..12 -> S2K1..S2K6, usw.
+    function getGameAndEnd(oneBasedIndex) {
         const spiel = Math.floor((oneBasedIndex - 1) / ENDS_PER_GAME) + 1;
         const kehre = ((oneBasedIndex - 1) % ENDS_PER_GAME) + 1;
-        return `S${spiel}K${kehre}`;
+        return { spiel, kehre, code: `S${spiel}K${kehre}` };
     }
 
     function migrateLegacyType(type) {
@@ -1031,23 +1063,32 @@
             const entriesNewestFirst = state.history
                 .map((item, chronoIdx) => ({
                     item,
-                    code: formatGameEndCode(chronoIdx + 1)
+                    ...getGameAndEnd(chronoIdx + 1)
                 }))
                 .reverse();
 
-            historyList.innerHTML = entriesNewestFirst.map(({ item, code }) => {
-                const info = levelLabels[item.kind][item.level];
-                return `
+            const parts = [];
+            for (let i = 0; i < entriesNewestFirst.length; i++) {
+                const current = entriesNewestFirst[i];
+                const info = levelLabels[current.item.kind][current.item.level];
+                parts.push(`
                     <li class="history-item">
                         <div class="history-left">
-                            <span class="shot-num">${code}</span>
-                            <span class="cat-tag">${kindNames[item.kind]}</span>
+                            <span class="shot-num">${current.code}</span>
+                            <span class="cat-tag">${kindNames[current.item.kind]}</span>
                             <span class="badge ${info.badge}">${info.text}</span>
                         </div>
-                        <span class="history-time">${item.time}</span>
+                        <span class="history-time">${current.item.time}</span>
                     </li>
-                `;
-            }).join('');
+                `);
+
+                const next = entriesNewestFirst[i + 1];
+                if (next && next.spiel !== current.spiel) {
+                    parts.push(`<li class="history-divider" aria-hidden="true">Spiel ${next.spiel}</li>`);
+                }
+            }
+
+            historyList.innerHTML = parts.join('');
         }
     }
 
